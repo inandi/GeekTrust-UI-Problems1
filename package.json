@@ -1,0 +1,24 @@
+{
+  "name": "geektrust-ui-problems1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inandi/GeekTrust-UI-Problems1.git"
+  },
+  "author": "gobinda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/inandi/GeekTrust-UI-Problems1/issues"
+  },
+  "homepage": "https://github.com/inandi/GeekTrust-UI-Problems1#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-connect": "^5.7.0",
+    "gulp-webserver": "^0.9.1"
+  }
+}
