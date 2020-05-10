@@ -1,7 +1,8 @@
 loadPlanet();
 var missionConvoyObj = {};
-var missionConvoyPlanetObj = {}
-var selectedPlanet = [];
+var missionConvoyPlanetObj = {};
+var missionConvoyVehicleObj = {};
+var timeTaken;
 
 /**
 * load all planet using planet API
@@ -11,24 +12,28 @@ function loadPlanet(el='') {
 		url: 'https://findfalcone.herokuapp.com/planets',
 		type: 'GET',
 		success: function(data) {
-			// var arr = $('.mission-planet').map((i, e) => e.value).get();
-			// let html = '';
 			$.each($(".mission-planet"), function(i, v) {
-				let _thisName = $(this).attr('name');
+				let _this = $(this);
 				let html = '';
 				if ($.isEmptyObject(missionConvoyObj)) {
-					$(this).html(function() {
+					_this.html(function() {
 						html = "<option value=''>- Select -</option>";
 						$.each(data, function(index, val) {
 							html += "<option value='"+ val.distance +"'>"+ val.name +"</option>";
 						});
 						return html;
 					})
-				} else if (el!=_thisName) {
-					if (_thisName in missionConvoyObj) {
-
+				} else if (el.attr('name') != _this.attr('name')) {
+					if (_this.attr('name') in missionConvoyObj) {
+						// el.val() ? _this.find("option").show() : '';
+						$.each(missionConvoyObj, function(a, c) {
+							// el.val() ? _this.find("option").show() : '';
+							el.val() ? _this.find("option[value='"+ $("[name='"+ a +"']").val() +"']").hide() : '';
+							el.val() ? _this.find("option[value='"+ _this.find('option:selected').val() +"']").show() : '';
+							// console.log(_this.find('option:selected').val())
+						});
 					} else {
-						$(this).html(function() {
+						_this.html(function() {
 							html = "<option value=''>- Select -</option>";
 							$.each(data, function(index, val) {
 								if(  $.inArray(""+ val.distance +"", $('.mission-planet').map((i, e) => e.value).get()) < 0 ) {
@@ -41,15 +46,12 @@ function loadPlanet(el='') {
 				}
 			});
 		},
-		error: function (request, status, error) {
-			alert(request.responseText);
-		}
 	})
 	.done(function() {
 		loadVehicles();
 	})
-	.fail(function() {
-		// console.log("error");
+	.fail(function(...errorParam) {
+		alert((errorParam[1] ? (errorParam[1].toLowerCase() + "!!!") : 'error!!!') +" "+ (errorParam[2] ? errorParam[2].toLowerCase() : 'something is not right') +", try again.");
 	})
 	.always(function() {
 		// console.log("complete");
@@ -68,11 +70,17 @@ function loadVehicles() {
 				if ($(this).closest('.mission-traffic').find('select.mission-planet').val()) {
 					let html = '';
 					let _thisAttribute = $(this).attr('data-vehicle-attr');
+					let _thisAttributePlanetBox = $(this).attr('data-related-planet-selector');
+					let _thisTargetPlanetDistance = $(this).closest('.mission-traffic').find('select.mission-planet').val();
 					$(this).html(function() {
 						$.each(data, function(index, val) {
+							let isDisabled = '';
+							if (val.max_distance < _thisTargetPlanetDistance) {
+								isDisabled = 'disabled';
+							}
 							html += "\
-							<div class='radio'>\
-							<label><input type='radio' name='"+ val.speed +"-"+ _thisAttribute +"'>"+ val.name +" ("+ val.total_no +") </label>\
+							<div class='radio "+ isDisabled +"'>\
+							<label><input type='radio' class='mission-vehicles' data-max-distance='"+ val.max_distance +"' data-name='"+ val.name +"'  data-total-no='"+ val.total_no +"' "+ isDisabled +" data-related-planet-selector-opt='"+ _thisAttributePlanetBox +"' value='"+ val.speed +"' name='"+ _thisAttribute +"'><span class='opt-text'>"+ missionVehiclesLabel(val.name,val.total_no) +"</span></label>\
 							</div>";
 						});
 						return html;
@@ -89,33 +97,85 @@ function loadVehicles() {
 			alert(request.responseText);
 		}
 	})
-	.fail(function() {
-		// console.log("error");
+	.done(function() {
+		$.each(missionConvoyObj, function(index, val) {
+			if (val["vehicle"]) {
+				$('input[name='+ val["vehicle"]["vehicle_selector"] +'][value="'+ val["vehicle"]["vehicle_speed"] +'"]').prop('checked', true).trigger('change');
+			}
+		});
+	})
+	.fail(function(...errorParam) {
+		alert((errorParam[1] ? (errorParam[1].toLowerCase() + "!!!") : 'error!!!') +" "+ (errorParam[2] ? errorParam[2].toLowerCase() : 'something is not right') +", try again.");
 	})
 	.always(function() {
 		// console.log("complete");
 	});
 }
 
+/**
+* mission veihicle change event
+*/
+$(document).on('change', '.mission-vehicles', function(event) {
+	event.preventDefault();
+	let _this = $(this);
+	let _thisName = _this.attr('name');
+	let l = {};
+	l.vehicle_selector = _thisName;
+	l.vehicle_max_distance = _this.attr('data-max-distance');
+	l.vehicle_name = _this.attr('data-name');
+	l.vehicle_speed = _this.val();
+	l.vehicle_total_no = _this.attr('data-total-no');
+	missionConvoyObj[_this.attr('data-related-planet-selector-opt')]["vehicle"] = l;
+	_this.closest('label').find('span.opt-text').html(missionVehiclesLabel(_this.attr('data-name'),(parseInt(_this.attr('data-total-no'))-1)));
+	timeTaken = undefined;
+	$('.time-text').html(timeTaken);
+});
+
+function calculate() {
+
+}
+
+/**
+* mission dropdown change event
+*/
 $(document).on('change', '.mission-planet', function(event) {
 	event.preventDefault();
-	let _thisName = $(this).attr('name');
+	let _this = $(this);
+	let _thisName = _this.attr('name');
 	if ($(this).val()) {
 		let l = {};
-		l.planet = $(this).val() ? $(this).find('option:selected').text().toLowerCase() : ''
-		missionConvoyPlanetObj[_thisName] = l
+		l.planet = $(this).val() ? $(this).find('option:selected').text().toLowerCase() : '';
+		missionConvoyPlanetObj[_thisName] = l;
 		missionConvoyObj = missionConvoyPlanetObj;
 	} else {
 		if (_thisName in missionConvoyObj) {
 			delete missionConvoyObj[_thisName];
 		}
 	}
-	console.log(missionConvoyObj)
-	loadPlanet(_thisName);
+	loadPlanet(_this);
 });
 
+/**
+* reset all elements in search form
+*/
 function resetForm() {
 	missionConvoyObj = {};
- 	missionConvoyPlanetObj = {}
+	missionConvoyPlanetObj = {}
 	loadPlanet();
+}
+
+/**
+* update dynamic label of vehicles
+*/
+function missionVehiclesLabel(...el){
+	return el[0] + ' (' + el[1] + ')';
+}
+
+/**
+* submit and get result in new page
+*/
+function save() {
+	if ($.isEmptyObject(missionConvoyObj)) {
+		return true;
+	}
 }
