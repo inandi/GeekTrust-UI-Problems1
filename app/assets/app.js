@@ -2,7 +2,25 @@ loadPlanet();
 var missionConvoyObj = {};
 var missionConvoyPlanetObj = {};
 var missionConvoyVehicleObj = {};
-var timeTaken;
+var timeTaken = 0;
+
+toastr.options = {
+	"closeButton": true,
+	"debug": false,
+	"newestOnTop": false,
+	"progressBar": false,
+	"positionClass": "toast-top-right",
+	"preventDuplicates": false,
+	"onclick": null,
+	"showDuration": "300",
+	"hideDuration": "1000",
+	"timeOut": "5000",
+	"extendedTimeOut": "1000",
+	"showEasing": "swing",
+	"hideEasing": "linear",
+	"showMethod": "fadeIn",
+	"hideMethod": "fadeOut"
+};
 
 /**
 * load all planet using planet API
@@ -51,7 +69,10 @@ function loadPlanet(el='') {
 		loadVehicles();
 	})
 	.fail(function(...errorParam) {
-		alert((errorParam[1] ? (errorParam[1].toLowerCase() + "!!!") : 'error!!!') +" "+ (errorParam[2] ? errorParam[2].toLowerCase() : 'something is not right') +", try again.");
+		toastr["error"](
+			(errorParam[2] ? errorParam[2].toLowerCase() : "something is not right") + ", try again.",
+			(errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
+			);
 	})
 	.always(function() {
 		// console.log("complete");
@@ -93,9 +114,6 @@ function loadVehicles() {
 				}
 			});
 		},
-		error: function (request, status, error) {
-			alert(request.responseText);
-		}
 	})
 	.done(function() {
 		$.each(missionConvoyObj, function(index, val) {
@@ -105,7 +123,10 @@ function loadVehicles() {
 		});
 	})
 	.fail(function(...errorParam) {
-		alert((errorParam[1] ? (errorParam[1].toLowerCase() + "!!!") : 'error!!!') +" "+ (errorParam[2] ? errorParam[2].toLowerCase() : 'something is not right') +", try again.");
+		toastr["error"](
+			(errorParam[2] ? errorParam[2].toLowerCase() : "something is not right") + ", try again.",
+			(errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
+			);
 	})
 	.always(function() {
 		// console.log("complete");
@@ -127,12 +148,19 @@ $(document).on('change', '.mission-vehicles', function(event) {
 	l.vehicle_total_no = _this.attr('data-total-no');
 	missionConvoyObj[_this.attr('data-related-planet-selector-opt')]["vehicle"] = l;
 	_this.closest('label').find('span.opt-text').html(missionVehiclesLabel(_this.attr('data-name'),(parseInt(_this.attr('data-total-no'))-1)));
-	timeTaken = undefined;
-	$('.time-text').html(timeTaken);
+	calculate(_this);
 });
 
-function calculate() {
-
+/**
+* calculate the time
+*/
+function calculate(el) {
+	timeTaken = 0;
+	el.closest('.mission-traffic').attr('data-mission-traffice-section-value', (el.closest('.mission-traffic').find('select.mission-planet').val() / el.val()));
+	$.each($('.mission-traffic[data-mission-traffice-section-value]'), function(index, val) {
+		timeTaken = timeTaken + parseInt($(val).attr('data-mission-traffice-section-value'));
+	});
+	$('.time-text').html(timeTaken + ' hour(s)');
 }
 
 /**
@@ -160,7 +188,8 @@ $(document).on('change', '.mission-planet', function(event) {
 */
 function resetForm() {
 	missionConvoyObj = {};
-	missionConvoyPlanetObj = {}
+	missionConvoyPlanetObj = {};
+	timeTaken = 0;
 	loadPlanet();
 }
 
@@ -175,7 +204,51 @@ function missionVehiclesLabel(...el){
 * submit and get result in new page
 */
 function save() {
+	console.log(missionConvoyObj)
 	if ($.isEmptyObject(missionConvoyObj)) {
 		return true;
+	} else {
+		$.ajax({
+			url: 'https://findfalcone.herokuapp.com/token',
+			type: 'POST',
+			headers: {"Accept": "application/json"},
+		})
+		.done(function(data) {
+			$.ajax({
+				url: 'https://findfalcone.herokuapp.com/find',
+				type: 'POST',
+				headers: {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				data: JSON.stringify({"token" : ""+ data.token +"","planet_names" :["Donlon","Enchai","Pingasor","Sapir"],"vehicle_names" : ["Space pod","Space rocke","Space rocke","Space rocket"]}),
+				success: function(data) {
+					if (data.status=='success') {
+						console.log(data)
+					} else {
+						toastr["warning"]("something is not right, try again.","warning");
+					}
+				}
+			})
+			.done(function(data) {
+
+			})
+			.fail(function(...errorParam) {
+				toastr["error"](
+					(errorParam[2] ? errorParam[2].toLowerCase() : "something is not right") + ", try again.",
+					(errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
+					);
+			})
+			.always(function() {
+			});
+		})
+		.fail(function(...errorParam) {
+			toastr["error"](
+				(errorParam[2] ? errorParam[2].toLowerCase() : "something is not right") + ", try again.",
+				(errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
+				);
+		})
+		.always(function() {
+		});
 	}
 }
