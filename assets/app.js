@@ -66,8 +66,10 @@ function loadPlanet(el='') {
 		},
 	})
 	.done(function() {
-		loadVehicles();
-	})
+      if (!$.isEmptyObject(missionConvoyObj)) {
+        loadVehicles();
+     }
+  })
 	.fail(function(...errorParam) {
 		toastr["error"](
 			(errorParam[2] ? errorParam[2].toLowerCase() : "something is not right") + ", try again.",
@@ -243,12 +245,12 @@ function save() {
 				success: function(data) {
 					if (data.status=='success') {
                   window.location.href = "result.html";
-						console.log(data)
-					} else {
-						toastr["warning"]("something is not right, try again.","warning");
-					}
-				}
-			})
+                  console.log(data)
+               } else {
+                  toastr["warning"]("something is not right, try again.","warning");
+               }
+            }
+         })
 			.done(function(data) {
 
 			})
