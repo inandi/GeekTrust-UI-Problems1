@@ -2,11 +2,12 @@
 <html>
 <head>
    <?php include_once('common/css_vendor.php'); ?>
+   <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>assets/g_index.css">
    <title><?php echo PROJECT; ?> | Home</title>
 </head>
 <body>
    <?php include_once('common/header.php'); ?>
-   <div class="row">
+   <div class="container">
       <div class="col-md-12">
          <div class="col-md-9">
             <div class="well text-align-center-custom">Select planets you want to search in</div>
@@ -62,6 +63,6 @@
       </div>
    </div>
    <?php include_once('common/footer.php'); ?>
-   <?php include_once('common/js_vendor.php'); ?>
+   <script src="<?php echo BASE_URL; ?>assets/g_index.js"></script>
 </body>
 </html>

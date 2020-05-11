@@ -4,24 +4,6 @@ var missionConvoyPlanetObj = {};
 var missionConvoyVehicleObj = {};
 var timeTaken = 0;
 
-toastr.options = {
-	"closeButton": true,
-	"debug": false,
-	"newestOnTop": false,
-	"progressBar": false,
-	"positionClass": "toast-top-right",
-	"preventDuplicates": false,
-	"onclick": null,
-	"showDuration": "300",
-	"hideDuration": "1000",
-	"timeOut": "5000",
-	"extendedTimeOut": "1000",
-	"showEasing": "swing",
-	"hideEasing": "linear",
-	"showMethod": "fadeIn",
-	"hideMethod": "fadeOut"
-};
-
 /**
 * load all planet using planet API
 */
@@ -67,18 +49,15 @@ function loadPlanet(el='') {
 	})
 	.done(function() {
       if (!$.isEmptyObject(missionConvoyObj)) {
-        loadVehicles();
-     }
-  })
+       loadVehicles();
+    }
+ })
 	.fail(function(...errorParam) {
 		toastr["error"](
 			(errorParam[2] ? errorParam[2].toLowerCase() : "something is not right") + ", try again.",
 			(errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
 			);
 	})
-	.always(function() {
-		// console.log("complete");
-	});
 }
 
 /**
@@ -130,9 +109,6 @@ function loadVehicles() {
 			(errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
 			);
 	})
-	.always(function() {
-		// console.log("complete");
-	});
 }
 
 /**
@@ -219,12 +195,14 @@ function resetForm() {
 function missionVehiclesLabel(...el){
 	return el[0] + ' (' + el[1] + ')';
 }
-
+ 
 /**
 * submit and get result in new page
 */
 function save() {
 	console.log(missionConvoyObj)
+   let planetNamesArray = $.map( missionConvoyObj, function( n, i ) { return n.planet });
+   let vehicleNamesArray = $.map( missionConvoyObj, function( n, i ) { return n.vehicle });
 	if ($.isEmptyObject(missionConvoyObj)) {
 		return true;
 	} else {
@@ -242,10 +220,12 @@ function save() {
 					"Content-Type" : "application/json"
 				},
 				data: JSON.stringify({"token" : ""+ data.token +"","planet_names" :["Donlon","Enchai","Pingasor","Sapir"],"vehicle_names" : ["Space pod","Space rocke","Space rocke","Space rocket"]}),
+            // data: JSON.stringify({"token" : ""+ data.token +"","planet_names" :["Donlon","Enchai","Pingasor","Sapir"],"vehicle_names" : ["Space pod","Space rocke","Space rocke","Space rocket"]}),
 				success: function(data) {
 					if (data.status=='success') {
-                  window.location.href = "result.html";
                   console.log(data)
+                  localStorage.setItem('herokuapp_response', JSON.stringify(data));
+                  window.location.href = "result.php";
                } else {
                   toastr["warning"]("something is not right, try again.","warning");
                }
@@ -260,8 +240,6 @@ function save() {
 					(errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
 					);
 			})
-			.always(function() {
-			});
 		})
 		.fail(function(...errorParam) {
 			toastr["error"](
@@ -269,7 +247,5 @@ function save() {
 				(errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
 				);
 		})
-		.always(function() {
-		});
 	}
 }
