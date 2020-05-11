@@ -3,6 +3,7 @@ var missionConvoyObj = {};
 var missionConvoyPlanetObj = {};
 var missionConvoyVehicleObj = {};
 var timeTaken = 0;
+$('.reset-search-form').show();
 
 /**
 * load all planet using planet API
