@@ -161,6 +161,23 @@ function calculate(el) {
 		timeTaken = timeTaken + parseInt($(val).attr('data-mission-traffice-section-value'));
 	});
 	$('.time-text').html(timeTaken + ' hour(s)');
+   toggleSaveButton();
+}
+
+/**
+* disable and enable save button
+*/
+function toggleSaveButton(){
+   let x = 0;
+   $('.find-falcone-button').attr('disabled','true');
+   missionConvoyObjCompleteVehicle = $.map( missionConvoyObj, function( n, i ) {
+      if (n.vehicle) {
+         return ++x;
+      }
+   });
+   if ($('.mission-planet').length === missionConvoyObjCompleteVehicle.length) {
+      $('.find-falcone-button').removeAttr('disabled');
+   }
 }
 
 /**
@@ -187,10 +204,11 @@ $(document).on('change', '.mission-planet', function(event) {
 * reset all elements in search form
 */
 function resetForm() {
-	missionConvoyObj = {};
-	missionConvoyPlanetObj = {};
-	timeTaken = 0;
-	loadPlanet();
+   $('.find-falcone-button').attr('disabled','true');
+   missionConvoyObj = {};
+   missionConvoyPlanetObj = {};
+   timeTaken = 0;
+   loadPlanet();
 }
 
 /**
@@ -224,6 +242,7 @@ function save() {
 				data: JSON.stringify({"token" : ""+ data.token +"","planet_names" :["Donlon","Enchai","Pingasor","Sapir"],"vehicle_names" : ["Space pod","Space rocke","Space rocke","Space rocket"]}),
 				success: function(data) {
 					if (data.status=='success') {
+                  window.location.href = "result.html";
 						console.log(data)
 					} else {
 						toastr["warning"]("something is not right, try again.","warning");
