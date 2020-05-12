@@ -1,7 +1,6 @@
 loadPlanet();
 var missionConvoyObj = {};
 var missionConvoyPlanetObj = {};
-var missionConvoyVehicleObj = {};
 var timeTaken = 0;
 $('.reset-search-form').show();
 
@@ -158,6 +157,8 @@ function updateOptionLabel(el) {
    });
    el.attr('data-available-no', (parseInt(el.attr('data-available-no'))-1));
    if (el.attr('data-available-no')==0) {
+            el.attr('disabled', 'true');
+      el.closest('div.radio').addClass('disabled');
       el.closest('.radio').find('span.opt-text').css('text-decoration', 'line-through')
    }
    $.each($('[data-name]'), function(index, val) {
