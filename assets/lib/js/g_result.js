@@ -9,7 +9,7 @@
       localStorage.setItem('herokuapp_response', '');
    } else { 
       html = `
-      <h1>Error! Nothing happened, let's try again.</h1>
+      <h1>Info! Nothing to display, let's try again.</h1>
       `;
    }  
    $('.geektrust-message').html(html);
