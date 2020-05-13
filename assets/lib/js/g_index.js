@@ -74,14 +74,17 @@ function loadVehicles() {
                let _thisAttribute = $(this).attr('data-vehicle-attr');
                let _thisAttributePlanetBox = $(this).attr('data-related-planet-selector');
                let _thisTargetPlanetDistance = $(this).closest('.mission-traffic').find('select.mission-planet').val();
+               let _thisTargetPlanetName = $(this).closest('.mission-traffic').find('select.mission-planet').find('option:selected').text().toLowerCase();
                $(this).html(function() {
                   $.each(data, function(index, val) {
                      let isDisabled = '';
+                     let isDisabledTitle = '';
                      if (val.max_distance < _thisTargetPlanetDistance) {
                         isDisabled = 'disabled';
+                        isDisabledTitle = val.name.toLowerCase() + ' can not travel to ' + _thisTargetPlanetName + ', due to its distance';
                      }
                      html += "\
-                     <div class='radio "+ isDisabled +"'>\
+                     <div class='radio "+ isDisabled +"' data-title='"+ isDisabledTitle +"' title='"+ isDisabledTitle +"'>\
                      <label><input type='radio' disable-distance='"+ isDisabled +"' class='mission-vehicles' data-max-distance='"+ val.max_distance +"' data-name='"+ val.name +"' data-total-no='"+ val.total_no +"' data-available-no='"+ val.total_no +"' "+ isDisabled +" data-related-planet-selector-opt='"+ _thisAttributePlanetBox +"' value='"+ val.speed +"' name='"+ _thisAttribute +"'><span class='opt-text'>"+ missionVehiclesLabel(val.name,val.total_no) +"</span></label>\
                      </div>";
                   });
@@ -147,6 +150,39 @@ function calculate(el) {
 * update option label
 */
 function updateOptionLabel(el) {
+   $.each($('[data-name]'), function(index, val) {
+      if ( $(val).attr('disable-distance') === '' ) {
+         $(val).removeAttr('disabled');
+         $(val).closest('div.radio').removeClass('disabled');
+      }
+      $(val).closest('div.radio').attr('title',$(val).closest('div.radio').attr('data-title'));
+      $(val).attr('data-available-no', $(val).attr('data-total-no'));
+      $(val).closest('.radio').find('span.opt-text').css('text-decoration', '');
+   });
+   $.each(missionConvoyObj, function(index, val) {
+      if (val.vehicle) {
+         $.each($('[data-name="'+ val.vehicle.vehicle_name +'"]'), function(i, v) {
+            if ($(v).attr('data-available-no') > 0) {
+               $(v).attr('data-available-no', (parseInt($(v).attr('data-available-no'))-1));
+            }
+            if ( $(v).attr('data-available-no') == 0 && !$(v).is(':checked') ) {
+               $(v).attr('disabled', 'true');
+               $(v).closest('div.radio').addClass('disabled');
+               $(v).closest('div.radio').attr('title', 'no more ' + val.vehicle.vehicle_name.toLowerCase() + ' left');
+               $(v).closest('.radio').find('span.opt-text').css('text-decoration', 'line-through')
+            }
+         });
+      }
+   });
+   $.each($('[data-name]'), function(index, val) {
+      $(val).closest('.radio').find('span.opt-text').html(missionVehiclesLabel($(val).attr('data-name'),$(val).attr('data-available-no')));
+   });
+}
+
+/**
+* update option label
+*/
+function ________________________updateOptionLabel(el) {
    $.each($('[name="'+ el.attr('name') +'"]'), function(index, val) {
       $(val).attr('data-available-no', $(val).attr('data-total-no'));
       $(val).closest('.radio').find('span.opt-text').css('text-decoration', '');
@@ -157,7 +193,7 @@ function updateOptionLabel(el) {
    });
    el.attr('data-available-no', (parseInt(el.attr('data-available-no'))-1));
    if (el.attr('data-available-no')==0) {
-            el.attr('disabled', 'true');
+      el.attr('disabled', 'true');
       el.closest('div.radio').addClass('disabled');
       el.closest('.radio').find('span.opt-text').css('text-decoration', 'line-through')
    }
@@ -211,6 +247,7 @@ function resetForm() {
    missionConvoyPlanetObj = {};
    timeTaken = 0;
    loadPlanet();
+   $("[data-vehicle-attr*=vehicle-box]").html('');
 }
 
 /**
