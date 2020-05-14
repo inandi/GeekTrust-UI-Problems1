@@ -13,6 +13,7 @@ install XAMPP on your system. and copy the projectdirectory in htdoc directory o
 
 
 xampp
+
   |-- htdocs
+
 		|-- GeekTrust-UI-Problems1
-		
