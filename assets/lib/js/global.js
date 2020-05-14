@@ -27,4 +27,4 @@ var firstLetterUppercase = function(str) {
       return letter.toUpperCase();
    });
    return str;
-}
+};

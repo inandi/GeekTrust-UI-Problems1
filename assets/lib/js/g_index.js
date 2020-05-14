@@ -211,7 +211,6 @@ function resetForm() {
    missionConvoyPlanetObj = {};
    timeTaken = 0;
    loadPlanet();
-   // $("[data-vehicle-attr*=vehicle-box]").html('');
 }
 
 /**
