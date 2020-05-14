@@ -8,59 +8,13 @@ Queen Al Falcone is now in hiding. But if King Shan can find her before the year
 
 * Apache (XAMPP)
 * Javascript/JQuery
+* Browser e.g. Google Chrome
 
-install XAMPP on your system. and copy the projectdirectory in htdoc directory of xampp. the structure will like this below diagram:
-
+install XAMPP on your system. and copy the projectdirectory in htdoc directory of xampp. the structure will be like this below diagram:
 
 * xampp/
 	* htdocs/
 		* GeekTrust-UI-Problems1/
-			* result.php
-			* common/
-				* css_vendor.php 
-				* footer.php 
-				* header.php 
-				* js_vendor.php 
-			* config/
-				* constant.php
-			* index.php
-			* assets/
-				* media/
-					* logo.png
-				* lib/
-					* css/
-						* g_index.css
-						* g_result.css
-						* global.css
-					* js/
-						* g_index.js 
-						* g_result.js 
-						* global.js 
-			* README.md
-|--xampp/
-   |--htdocs/
-      |--GeekTrust-UI-Problems1/
-      |--result.php
-      |--common/
-      |--css_vendor.php 
-      |--footer.php 
-      |--header.php 
-      |--js_vendor.php 
-      |--config/
-      |--constant.php
-      |--index.php
-      |--assets/
-      |--media/
-      |--logo.png
-      |--lib/
-      |--css/
-      |--g_index.css
-      |--g_result.css
-      |--global.css
-      |--js/
-      |--g_index.js 
-      |--g_result.js 
-      |--global.js 
-      |--README.md
 
+ run localhost from XAMPP and open "http://localhost/GeekTrust-UI-Problems1/" on your browser and start calculating the problem.
  
