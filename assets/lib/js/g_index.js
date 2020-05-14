@@ -24,26 +24,11 @@ function loadPlanet(el='') {
                   return html;
                })
             } else if (el.attr('name') != _this.attr('name')) {
-               console.log(el.attr('name'))
-               if (_this.attr('name') in missionConvoyObj) {
-                  // el.val() ? _this.find("option").show() : '';
-                  $.each(missionConvoyObj, function(a, c) {
-                     // el.val() ? _this.find("option").show() : '';
-                     el.val() ? _this.find("option[value='"+ $("[name='"+ a +"']").val() +"']").hide() : '';
-                     el.val() ? _this.find("option[value='"+ _this.find('option:selected').val() +"']").show() : '';
-                     // console.log(_this.find('option:selected').val())
-                  });
-               } else {
-                  _this.html(function() {
-                     html = "<option value=''>- Select -</option>";
-                     $.each(data, function(index, val) {
-                        if(  $.inArray(""+ val.distance +"", $('.mission-planet').map((i, e) => e.value).get()) < 0 ) {
-                           html += "<option value='"+ val.distance +"'>"+ val.name +"</option>";
-                        }
-                     });
-                     return html;
-                  })
-               }
+               _this.find("option").show()
+               $.each(missionConvoyObj, function(a, c) {
+                  _this.find("option[value='"+ $("[name='"+ a +"']").val() +"']").hide();
+               });
+               _this.find("option:selected").show()
             }
          });
       },
@@ -51,62 +36,8 @@ function loadPlanet(el='') {
    .done(function() {
       if (!$.isEmptyObject(missionConvoyObj)) {
          loadVehicles();
-      }
-   })
-   .fail(function(...errorParam) {
-      toastr["error"](
-         (errorParam[2] ? errorParam[2].toLowerCase() : "something is not right") + ", try again.",
-         (errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
-         );
-   })
-}
-
-/**
-* load all planet using planet API
-*/
-function ____________________________loadPlanet(el='') {
-   $.ajax({
-      url: 'https://findfalcone.herokuapp.com/planets',
-      type: 'GET',
-      success: function(data) {
-         $.each($(".mission-planet"), function(i, v) {
-            let _this = $(this);
-            let html = '';
-            if ($.isEmptyObject(missionConvoyObj)) {
-               _this.html(function() {
-                  html = "<option value=''>- Select -</option>";
-                  $.each(data, function(index, val) {
-                     html += "<option value='"+ val.distance +"'>"+ val.name +"</option>";
-                  });
-                  return html;
-               })
-            } else if (el.attr('name') != _this.attr('name')) {
-               if (_this.attr('name') in missionConvoyObj) {
-                  // el.val() ? _this.find("option").show() : '';
-                  $.each(missionConvoyObj, function(a, c) {
-                     // el.val() ? _this.find("option").show() : '';
-                     el.val() ? _this.find("option[value='"+ $("[name='"+ a +"']").val() +"']").hide() : '';
-                     el.val() ? _this.find("option[value='"+ _this.find('option:selected').val() +"']").show() : '';
-                     // console.log(_this.find('option:selected').val())
-                  });
-               } else {
-                  _this.html(function() {
-                     html = "<option value=''>- Select -</option>";
-                     $.each(data, function(index, val) {
-                        if(  $.inArray(""+ val.distance +"", $('.mission-planet').map((i, e) => e.value).get()) < 0 ) {
-                           html += "<option value='"+ val.distance +"'>"+ val.name +"</option>";
-                        }
-                     });
-                     return html;
-                  })
-               }
-            }
-         });
-      },
-   })
-   .done(function() {
-      if (!$.isEmptyObject(missionConvoyObj)) {
-         loadVehicles();
+      } else {
+         $("[data-vehicle-attr*=vehicle-box]").html('');
       }
    })
    .fail(function(...errorParam) {
@@ -280,7 +211,7 @@ function resetForm() {
    missionConvoyPlanetObj = {};
    timeTaken = 0;
    loadPlanet();
-   $("[data-vehicle-attr*=vehicle-box]").html('');
+   // $("[data-vehicle-attr*=vehicle-box]").html('');
 }
 
 /**
