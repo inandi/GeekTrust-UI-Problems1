@@ -24,6 +24,63 @@ function loadPlanet(el='') {
                   return html;
                })
             } else if (el.attr('name') != _this.attr('name')) {
+               console.log(el.attr('name'))
+               if (_this.attr('name') in missionConvoyObj) {
+                  // el.val() ? _this.find("option").show() : '';
+                  $.each(missionConvoyObj, function(a, c) {
+                     // el.val() ? _this.find("option").show() : '';
+                     el.val() ? _this.find("option[value='"+ $("[name='"+ a +"']").val() +"']").hide() : '';
+                     el.val() ? _this.find("option[value='"+ _this.find('option:selected').val() +"']").show() : '';
+                     // console.log(_this.find('option:selected').val())
+                  });
+               } else {
+                  _this.html(function() {
+                     html = "<option value=''>- Select -</option>";
+                     $.each(data, function(index, val) {
+                        if(  $.inArray(""+ val.distance +"", $('.mission-planet').map((i, e) => e.value).get()) < 0 ) {
+                           html += "<option value='"+ val.distance +"'>"+ val.name +"</option>";
+                        }
+                     });
+                     return html;
+                  })
+               }
+            }
+         });
+      },
+   })
+   .done(function() {
+      if (!$.isEmptyObject(missionConvoyObj)) {
+         loadVehicles();
+      }
+   })
+   .fail(function(...errorParam) {
+      toastr["error"](
+         (errorParam[2] ? errorParam[2].toLowerCase() : "something is not right") + ", try again.",
+         (errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
+         );
+   })
+}
+
+/**
+* load all planet using planet API
+*/
+function ____________________________loadPlanet(el='') {
+   $.ajax({
+      url: 'https://findfalcone.herokuapp.com/planets',
+      type: 'GET',
+      success: function(data) {
+         $.each($(".mission-planet"), function(i, v) {
+            let _this = $(this);
+            let html = '';
+            if ($.isEmptyObject(missionConvoyObj)) {
+               _this.html(function() {
+                  html = "<option value=''>- Select -</option>";
+                  $.each(data, function(index, val) {
+                     html += "<option value='"+ val.distance +"'>"+ val.name +"</option>";
+                  });
+                  return html;
+               })
+            } else if (el.attr('name') != _this.attr('name')) {
                if (_this.attr('name') in missionConvoyObj) {
                   // el.val() ? _this.find("option").show() : '';
                   $.each(missionConvoyObj, function(a, c) {
@@ -128,7 +185,6 @@ $(document).on('change', '.mission-vehicles', function(event) {
    l.vehicle_speed = _this.val();
    l.vehicle_total_no = _this.attr('data-total-no');
    missionConvoyObj[_this.attr('data-related-planet-selector-opt')]["vehicle"] = l;
-   // _this.closest('label').find('span.opt-text').html(missionVehiclesLabel(_this.attr('data-name'),(parseInt(_this.attr('data-total-no'))-1)));
    calculate(_this);
 });
 
@@ -174,29 +230,6 @@ function updateOptionLabel(el) {
          });
       }
    });
-   $.each($('[data-name]'), function(index, val) {
-      $(val).closest('.radio').find('span.opt-text').html(missionVehiclesLabel($(val).attr('data-name'),$(val).attr('data-available-no')));
-   });
-}
-
-/**
-* update option label
-*/
-function ________________________updateOptionLabel(el) {
-   $.each($('[name="'+ el.attr('name') +'"]'), function(index, val) {
-      $(val).attr('data-available-no', $(val).attr('data-total-no'));
-      $(val).closest('.radio').find('span.opt-text').css('text-decoration', '');
-      if ( $(val).attr('disable-distance') === '' ) {
-         $(val).removeAttr('disabled')
-         $(val).closest('div.radio').removeClass('disabled')
-      }
-   });
-   el.attr('data-available-no', (parseInt(el.attr('data-available-no'))-1));
-   if (el.attr('data-available-no')==0) {
-      el.attr('disabled', 'true');
-      el.closest('div.radio').addClass('disabled');
-      el.closest('.radio').find('span.opt-text').css('text-decoration', 'line-through')
-   }
    $.each($('[data-name]'), function(index, val) {
       $(val).closest('.radio').find('span.opt-text').html(missionVehiclesLabel($(val).attr('data-name'),$(val).attr('data-available-no')));
    });

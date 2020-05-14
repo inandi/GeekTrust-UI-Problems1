@@ -1,5 +1,5 @@
 <?php 
-define("PROJECT", "grrekTrust");
+define("PROJECT", "GeekTrust");
 define("BASE_URL", base_url());
 
 /**
