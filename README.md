@@ -12,8 +12,14 @@ Queen Al Falcone is now in hiding. But if King Shan can find her before the year
 install XAMPP on your system. and copy the projectdirectory in htdoc directory of xampp. the structure will like this below diagram:
 
 
-xampp
+* xampp/
+	* htdocs/
+		* GeekTrust-UI-Problems1/
+			* result.php
+			* common/
+			* config/
+			* index.php
+			* assets/
+			* README.md
 
-  |-- htdocs
-
-		|-- GeekTrust-UI-Problems1
+ 
