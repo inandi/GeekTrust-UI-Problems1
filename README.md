@@ -17,9 +17,25 @@ install XAMPP on your system. and copy the projectdirectory in htdoc directory o
 		* GeekTrust-UI-Problems1/
 			* result.php
 			* common/
+				* css_vendor.php 
+				* footer.php 
+				* header.php 
+				* js_vendor.php 
 			* config/
+				* constant.php
 			* index.php
 			* assets/
+				* media/
+					* logo.png
+				* lib/
+					* css/
+						* g_index.css
+						* g_result.css
+						* global.css
+					* js/
+						* g_index.js 
+						* g_result.js 
+						* global.js 
 			* README.md
 
  
