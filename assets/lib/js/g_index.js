@@ -211,6 +211,7 @@ function resetForm() {
    missionConvoyPlanetObj = {};
    timeTaken = 0;
    loadPlanet();
+   $('.time-text').html('0');
 }
 
 /**

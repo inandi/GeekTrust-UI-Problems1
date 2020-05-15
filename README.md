@@ -16,12 +16,12 @@ Install XAMPP on your system. And copy the project directory in htdoc directory 
 	* htdocs/
 		* GeekTrust-UI-Problems1/
 
- Run localhost from XAMPP and open "http://localhost/GeekTrust-UI-Problems1/" on your browser and start calculating the problem. It will show you its home screen having four dropdown for destinations. It is having option of planets e.g. Donlon, Enchai, Jebing, Sapir, Lerbin, Pingasor using "https://findfalcone.herokuapp.com/planets" API. On change of every planet-dropdown available space-vehicle will appear below the each dropdown in radio-button format using "https://findfalcone.herokuapp.com/vehicles" API. Option will be like this "sapce ship(2)", where first is the name of vehicle and in parenthesis it is available amount. also we are getting speed and max-distance of vehicles, if the selected planet's distance is greater than of any vehicle, they the vehicle option will be disabled. Now you can start selecting vehicles for your selected planet. Whenever you select vehicle three things will happen, which are:
+Run localhost from XAMPP and open "http://localhost/GeekTrust-UI-Problems1/" on your browser and start solving the problem. You will be shown four dropdowns for destination planets e.g. Donlon, Enchai, Jebing, Sapir, Lerbin, Pingasor using "https://findfalcone.herokuapp.com/planets" API. Every destination planet from the drop down list will show the available space-vehicle in radio-button format using "https://findfalcone.herokuapp.com/vehicles" API on selection. The space vehicle will be shown as “space ship(2)” where the first part is the name and the number within parenthesis being the available units. 
 
-* On the right hand side, in "Time taken" box, total time taken by all selected vehicles for their respective planet will be displayed
-* Whenever you select any option, the count in parenthesis will be updated. If it is 'zero', all the other non-selected options will be strike out and won’t be able select those. If you want to select those, you have re-calculate and select other option to make this available
-* "Find falcone", is disabled by default, you have to select all the four vehicles for four planets then it will available to click
+Also we are getting speed and max-distance of vehicles from API. If the selected planet's distance is greater than the max-distance of the vehicle, then the radio button will be disabled for that particular vehicle. Now you can start selecting vehicles for your selected planet. When vehicles are selected, three things happen:
+* On the right hand side, in "Time taken" box, total time taken by all selected vehicles for their respective planet will be summed up and displayed.
+* When you select a vehicle, the count in parenthesis will be updated. If the count becomes 'zero' for a particular vehicle, it will be strike through (space ship(0)) for other destinations. To make the vehicle available again, it has to be de-selected from any of the previous destination(s).
+* "Find Falcone!" button is disabled by default. The button is activated only when all the four destinations have been selected along with the four vehicles.
+On clicking the “Find Falcone!” button, you will be re-directed to a new page with the response (success/failure) message (using "https://findfalcone.herokuapp.com/find" API).
 
-Now when you have selected all the option, hit "Find falcone". it will redirect you to new page with message (using "https://findfalcone.herokuapp.com/find" API) whether it’s a success/fail. 
-
-Yahoo!!! We have found Falcone!!
+Yahoo!!! We have found Falcone (or not)!!
