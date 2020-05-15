@@ -20,7 +20,7 @@ Run localhost from XAMPP and open "http://localhost/GeekTrust-UI-Problems1/" on 
 
 Also we are getting speed and max-distance of vehicles from API. If the selected planet's distance is greater than the max-distance of the vehicle, then the radio button will be disabled for that particular vehicle. Now you can start selecting vehicles for your selected planet. When vehicles are selected, three things happen:
 * On the right hand side, in "Time taken" box, total time taken by all selected vehicles for their respective planet will be summed up and displayed.
-* When you select a vehicle, the count in parenthesis will be updated. If the count becomes 'zero' for a particular vehicle, it will be strike through (space ship(0)) for other destinations. To make the vehicle available again, it has to be de-selected from any of the previous destination(s).
+* When you select a vehicle, the count in parenthesis will be updated. If the count becomes 'zero' for a particular vehicle, it will be struke out for other destinations. To make the vehicle available again, it has to be de-selected from any of the previous destination(s).
 * "Find Falcone!" button is disabled by default. The button is activated only when all the four destinations have been selected along with the four vehicles.
 On clicking the “Find Falcone!” button, you will be re-directed to a new page with the response (success/failure) message (using "https://findfalcone.herokuapp.com/find" API).
 

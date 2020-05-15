@@ -34,11 +34,7 @@ function loadPlanet(el='') {
       },
    })
    .done(function() {
-      if (!$.isEmptyObject(missionConvoyObj)) {
-         loadVehicles();
-      } else {
-         $("[data-vehicle-attr*=vehicle-box]").html('');
-      }
+      loadVehicles();
    })
    .fail(function(...errorParam) {
       toastr["error"](
@@ -60,6 +56,7 @@ function loadVehicles() {
             if ($(this).closest('.mission-traffic').find('select.mission-planet').val()) {
                let html = '';
                let _thisAttribute = $(this).attr('data-vehicle-attr');
+               $(this).closest('.mission-traffic').attr('data-mission-traffic-section-value','0');
                let _thisAttributePlanetBox = $(this).attr('data-related-planet-selector');
                let _thisTargetPlanetDistance = $(this).closest('.mission-traffic').find('select.mission-planet').val();
                let _thisTargetPlanetName = $(this).closest('.mission-traffic').find('select.mission-planet').find('option:selected').text().toLowerCase();
@@ -80,6 +77,7 @@ function loadVehicles() {
                })
             } else {
                let html = '';
+               $(this).closest('.mission-traffic').attr('data-mission-traffic-section-value','0');
                $(this).html(function() {
                   return html;
                })
@@ -100,6 +98,9 @@ function loadVehicles() {
          (errorParam[1] ? (errorParam[1].toLowerCase()) : "error")
          );
    })
+   .always(function() {
+      calculate();
+   });
 }
 
 /**
@@ -122,14 +123,20 @@ $(document).on('change', '.mission-vehicles', function(event) {
 /**
 * calculate the time
 */
-function calculate(el) {
+function calculate(el='') {
    timeTaken = 0;
-   el.closest('.mission-traffic').attr('data-mission-traffice-section-value', (el.closest('.mission-traffic').find('select.mission-planet').val() / el.val()));
-   $.each($('.mission-traffic[data-mission-traffice-section-value]'), function(index, val) {
-      timeTaken = timeTaken + parseInt($(val).attr('data-mission-traffice-section-value'));
+   $.each(missionConvoyObj, function(index, val) {
+      if (val.vehicle) {
+         $('[data-vehicle-attr="'+ val.vehicle.vehicle_selector +'"]').closest('.mission-traffic').attr('data-mission-traffic-section-value',($('[data-vehicle-attr="'+ val.vehicle.vehicle_selector +'"]').closest('.mission-traffic').find('select.mission-planet').val() / val.vehicle.vehicle_speed));
+      }
    });
-   $('.time-text').html(timeTaken + ' hour(s)');
-   updateOptionLabel(el);
+   $.each($('.mission-traffic[data-mission-traffic-section-value]'), function(index, val) {
+      timeTaken = timeTaken + parseInt($(val).attr('data-mission-traffic-section-value'));
+   });
+   $('.time-text').html(timeTaken);
+   if (el) {
+      updateOptionLabel(el);
+   }
    toggleSaveButton();
 }
 
