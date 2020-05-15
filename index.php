@@ -53,7 +53,7 @@
          </div>
          <div class="col-md-3">
             <div class="well text-align-center-custom">
-               <h3>Time taken : <span class="time-text">-</span></h3>
+               <h3>Time taken : <span class="time-text">0</span></h3>
             </div>
          </div>
       </div>

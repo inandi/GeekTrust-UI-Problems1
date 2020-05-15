@@ -234,7 +234,7 @@ function save() {
          type: 'POST',
          headers: {"Accept": "application/json"},
       })
-      .done(function(data) {
+      .done(function(response) {
          $.ajax({
             url: 'https://findfalcone.herokuapp.com/find',
             type: 'POST',
@@ -242,7 +242,7 @@ function save() {
                "Accept" : "application/json",
                "Content-Type" : "application/json"
             },
-            data: JSON.stringify({"token" : ""+ data.token +"","planet_names" : planetNamesArray,"vehicle_names" : vehicleNamesArray }),
+            data: JSON.stringify({"token" : ""+ response.token +"","planet_names" : planetNamesArray,"vehicle_names" : vehicleNamesArray }),
             success: function(data) {
                if (data.status=='success') {
                   data["time_taken"] = timeTaken
