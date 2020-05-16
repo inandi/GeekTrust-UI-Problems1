@@ -7,6 +7,7 @@ Queen Al Falcone is now in hiding. But if King Shan can find her before the year
 ## Technology and how to start the program and test it
 
 * Apache (XAMPP)
+* PHP
 * Javascript/JQuery
 * Browser e.g. Google Chrome
 
