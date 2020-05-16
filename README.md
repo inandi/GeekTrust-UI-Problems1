@@ -11,7 +11,7 @@ Queen Al Falcone is now in hiding. But if King Shan can find her before the year
 * Javascript/JQuery
 * Browser e.g. Google Chrome
 
-Install XAMPP on your system. And copy the project directory in htdoc directory of xampp. The structure will be like this below diagram:
+Install XAMPP on your system. And copy the project directory in htdoc directory of XAMPP. The structure will be like this below diagram:
 
 * xampp/
 	* htdocs/
