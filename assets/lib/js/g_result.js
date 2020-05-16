@@ -1,4 +1,10 @@
+var herokuappResponse = '';
+
+/**
+* update data with response from find API
+*/
 (function($) {
+   herokuappResponse = localStorage.herokuapp_response;
    let html = '';
    if (localStorage.getItem('herokuapp_response')) {
       html = `
@@ -9,8 +15,24 @@
       localStorage.setItem('herokuapp_response', '');
    } else { 
       html = `
-      <h1>Info! Nothing to display, let's try again.</h1>
+      <h1>Nothing to display, let's try again. You will be redirected to main page in <span class="span-timer">5</span> second(s).</h1>
       `;
    }  
    $('.geektrust-message').html(html);
 })($);
+
+/**
+* if nothing to display then edirect to index page in 5 seconds
+*/
+setTimeout(function(){
+   if (!herokuappResponse) {
+      window.location = "index.php"; 
+   }
+}, 5000);
+
+/**
+* time box in seconds 
+*/
+setInterval(function(){ 
+   $('.span-timer').html($('.span-timer').html()-1)
+}, 1000);
